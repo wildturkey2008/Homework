@@ -11,11 +11,9 @@ thumbnails.forEach(thumbnail => {
     thumbnail.addEventListener("click", function() {
         // クリックされたサムネイルの画像のsrc属性を取得
         const clickedImageSrc = this.getAttribute("src");
-        const clickedImageAlt = this.getAttribute("alt");
 
-        // メイン画像のsrc属性とalt属性を更新
+        // メイン画像のsrc属性を更新
         mainImage.setAttribute("src", clickedImageSrc);
-        mainImage.setAttribute("alt", clickedImageAlt);
     });
 });
 
