@@ -35,7 +35,7 @@ h1 {
 }
 
 #modal {
-  background-color: lightgray;
+  background-color: rgb(237, 234, 234);
   width: 500px;
   height: 150px;
   border-radius: 20px;
