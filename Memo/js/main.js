@@ -23,23 +23,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const li = document.createElement("li");
       li.textContent = memoData.title;
       li.dataset.id = key;
-
-      // 既存のメモがクリックされた時の処理
-      li.addEventListener("click", () => {
-        currentSelectedMemoId = li.dataset.id;
-        const selectedData = JSON.parse(
-          localStorage.getItem(currentSelectedMemoId)
-        );
-        titleInput.value = selectedData.title;
-        contentInput.value = selectedData.content;
-        saveButton.textContent = "上書き";
-        h2value.textContent = "編集";
-        showDeleteButton();
-      });
-
       memoList.appendChild(li);
 
-      return currentSelectedMemoId;
+      // 既存のメモをクリックしたときのイベントリスナー
+      li.addEventListener("click", handleMemoClick);
     });
   };
 
@@ -87,6 +74,20 @@ document.addEventListener("DOMContentLoaded", () => {
     showDeleteButton();
   };
 
+  // （関数）既存のメモがクリックされた時の処理
+  const handleMemoClick = (event) => {
+    const li = event.target;
+    currentSelectedMemoId = li.dataset.id;
+    const selectedData = JSON.parse(
+      localStorage.getItem(currentSelectedMemoId)
+    );
+    titleInput.value = selectedData.title;
+    contentInput.value = selectedData.content;
+    saveButton.textContent = "上書き";
+    h2value.textContent = "編集";
+    showDeleteButton();
+  };
+
   // （関数）メモの削除
   const deleteMemo = () => {
     if (confirm("メモを削除しますか？")) {
@@ -116,7 +117,6 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // （メイン処理）
-
   newButton.addEventListener("click", clearContents);
   saveButton.addEventListener("click", saveMemo);
   deleteButton.addEventListener("click", deleteMemo);
@@ -124,5 +124,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // メモの読み込み
   loadMemos();
 
+  // 削除ボタンの表示/非表示切り替え
   showDeleteButton();
 });
