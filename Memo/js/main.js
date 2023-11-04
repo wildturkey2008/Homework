@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   const newButton = document.getElementById("newButton");
   const saveButton = document.getElementById("saveButton");
+  const deleteButton = document.getElementById("deleteButton");
   const titleInput = document.getElementById("title");
   const contentInput = document.getElementById("content");
   const memoList = document.querySelector(".memos");
@@ -30,14 +31,15 @@ document.addEventListener("DOMContentLoaded", () => {
         );
         titleInput.value = selectedData.title;
         contentInput.value = selectedData.content;
+        showDeleteButton();
       });
 
       memoList.appendChild(li);
+
       return currentSelectedMemoId;
     });
   };
 
-  
   // (関数)メモを保存
   const saveMemo = () => {
     const title = titleInput.value;
@@ -67,14 +69,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-
   // （関数）新規作成ボタンで初期化
   const clearContents = () => {
+    currentSelectedMemoId = null;
     // 入力フィールをクリアする
     titleInput.value = "";
     contentInput.value = "";
+    showDeleteButton();
   };
-
 
   // （関数）メモの削除
   const deleteMemo = () => {
@@ -83,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const selectedLi = document.querySelector(
         `[data-id="${currentSelectedMemoId}"]`
-        );
+      );
 
       // li要素をDOMから削除
       selectedLi.remove();
@@ -96,6 +98,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  // （関数）削除ボタンの表示切り替え
+  const showDeleteButton = () => {
+    if (currentSelectedMemoId === null) {
+      console.log(currentSelectedMemoId);
+      deleteButton.style.display = "none";
+    } else {
+      console.log(currentSelectedMemoId);
+      deleteButton.style.display = "block";
+    }
+  };
+
   // （メイン処理）
 
   newButton.addEventListener("click", clearContents);
@@ -104,4 +117,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // メモの読み込み
   loadMemos();
+
+  showDeleteButton();
 });
