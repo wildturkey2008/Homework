@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
         titleInput.value = "";
         contentInput.value = "";
       } else {
-        alert("タイトルの内容を入力して下さい");
+        alert("タイトルと内容を入力して下さい");
       }
     } else {
       // localstorageへ保存
