@@ -1,0 +1,66 @@
+.side-container {
+  width: 30%;
+  background-color: aquamarine;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-left: 0;
+  height: 100vh;
+}
+
+.sidebar-header {
+  height: 150px;
+}
+
+.memos-area {
+  width: 100%;
+  overflow-y: auto;
+
+}
+
+.buttons:hover {
+  cursor: pointer;
+  background-color: rgb(204, 62, 126);
+}
+
+.buttons:active {
+  transform: translateY(3px);
+}
+
+#newButton {
+  margin-left: 0;
+  margin-bottom: 20px;
+}
+
+ul {
+  width: 100%;
+  padding: 0;
+}
+
+li {
+  list-style-type: none;
+  width: calc(100% - 10px);
+  height: 50px;
+  margin: 5px 5px;
+  color: white;
+  background-color: rgb(247, 157, 197);
+  border-radius: 7px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .3s;
+}
+
+li:hover {
+  cursor: pointer;
+  background-color: rgb(204, 62, 126);
+}
+
+li:active {
+  transform: translateY(3px);
+}
+
+li.selected {
+  background-color: rgb(204, 62, 126);
+}
