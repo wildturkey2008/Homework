@@ -20,7 +20,8 @@ function App() {
     // LocalStorageから全てのメモIDをロードする
     const memoIDs = Object.keys(localStorage);
     // 各IDを使用してLocalStorageからメモをロードする
-    const loadMemos = memoIDs.map((id) => JSON.parse(localStorage.getItem(id)) || []).sort((a, b) => b.id - a.id);
+    const loadMemos = memoIDs.map((id) => JSON.parse(localStorage.getItem(id)) || [])
+    .sort((a, b) => b.id - a.id);
     setMemos(loadMemos);
   };
 
