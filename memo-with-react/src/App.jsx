@@ -7,91 +7,100 @@ import SideBar from './components/SideBar';
 function App() {
   const [memos, setMemos] = useState([]);
   const [currentMemo, setCurrentMemo] = useState({
-    id: null,
-    title: "",
-    content: "",
+    id: null, 
+    title: '', 
+    content: '', 
   });
 
+  // 起動時localStorageからメモを読み込んで表示
   useEffect(() => {
     loadMemosFromStorage();
-  }, []);
-  
+  },[]);
+
+  //（関数）メモ読み込み
   const loadMemosFromStorage = () => {
-    // LocalStorageから全てのメモIDをロードする
+    // localStorageからデータ読み込み
     const memoIDs = Object.keys(localStorage);
-    // 各IDを使用してLocalStorageからメモをロードする
-    const loadMemos = memoIDs.map((id) => JSON.parse(localStorage.getItem(id)) || []).sort((a, b) => b.id - a.id);
-    setMemos(loadMemos);
+    const loadedMemos = memoIDs.map((id) => JSON.parse(localStorage.getItem(id)));
+
+    // メモを降順にソートして表示
+    sortMemos(loadedMemos);
   };
 
-  const newButtonClicked = () => {
-    setCurrentMemo({ id: null, title: "", content: "" });
+  // （関数）currentMemo初期化
+  const clearMemo = () => {
+    setCurrentMemo({ id: null, title: '', content: '' });
   };
 
+  // （関数）新規作成ボタン
+  const clickNewButton = () => {
+    clearMemo();
+  };
+
+  // （関数）保存/上書きボタン
   const saveMemo = () => {
     const { id, title, content } = currentMemo;
-
+    
     if (!title || !content) {
-      alert("タイトルと内容を入力してください");
+      alert('タイトルと内容を入力してください');
       return;
     }
+    
+    // メモが選択されていればidに値がある。なければDate関数で作成する。
+    const memoId = id || Date.now().toString();
+    
+    // console.log(`id: ${currentMemo.id}, title: ${currentMemo.title}, content: ${currentMemo.content}`);
 
-    // 新しいIDを生成するか、既存のIDを使用する
-    const memoID = id || Date.now().toString();
-    const newMemo = {
-      ...currentMemo,
-      id: memoID,
-    };
+    // localStorageにメモを保存
+    const newMemo = {...currentMemo, id: memoId};
+    localStorage.setItem(memoId, JSON.stringify(newMemo));
 
-    // メモをLocalStorageに保存する
-    localStorage.setItem(memoID, JSON.stringify(newMemo));
-
-    // メモのリストを更新する
-    const updatedMemos = id
-      ? memos.map((memo) => (memo.id === id ? newMemo : memo))
+    // memosの中身を更新
+    const updatedMemos = id 
+      ? memos.map((memo) => (memo.id === id ? newMemo : memo)) 
       : [...memos, newMemo];
 
-    setMemos(updatedMemos);
-    // setCurrentMemo(newMemo);
-    setCurrentMemo({ id: null, title: "", content: "" });
+    // メモを降順にソートして表示
+    sortMemos(updatedMemos);
 
-    // メモが更新された後、ロードロジックを呼び出してリストを更新する
-    loadMemosFromStorage();
-
-    
+    clearMemo();  
   };
 
+  // （関数）選択したメモ削除
   const deleteMemo = (id) => {
-    if (id) {
-      // LocalStorageからメモを削除する
-      localStorage.removeItem(id);
-      // メモリストからメモを削除する
-      setMemos(memos.filter((memo) => memo.id !== id));
-      setCurrentMemo({ id: null, title: "", content: "" });
-      
-      // メモが更新された後、ロードロジックを呼び出してリストを更新する
-      loadMemosFromStorage();
-    }
+    // 選択されたメモをlocalStorageから削除
+    localStorage.removeItem(id);
+
+    // memosを更新
+    setMemos(memos.filter((memo) => memo.id !== id));
+
+    clearMemo();
   };
 
+  // （関数）メモ選択
   const onMemoSelected = (memo) => {
     setCurrentMemo(memo);
   };
 
+  // （関数）メモを降順にソート
+  const sortMemos = (memosToSort) => {
+    const sortedMemos = [...memosToSort].sort((a,b) => parseInt(b.id) - parseInt(a.id));
+    setMemos(sortedMemos)
+  }
+
+
   return (
     <div className="App">
       <SideBar
-        newButtonClicked={newButtonClicked}
+        clickNewButton={clickNewButton}
         memos={memos}
         onMemoSelected={onMemoSelected}
-        currentMemo={currentMemo}
       />
       <Main
-        newButtonClicked={newButtonClicked}
-        currentMemo={currentMemo}
-        setCurrentMemo={setCurrentMemo}
         saveMemo={saveMemo}
         deleteMemo={deleteMemo}
+        currentMemo={currentMemo}
+        setCurrentMemo={setCurrentMemo}
       />
     </div>
   );
