@@ -1,7 +1,7 @@
 import React from 'react'
 import "./SideBar.css"
 
-const SideBar = ({ clickNewButton, memos, onMemoSelected }) => {
+const SideBar = ({ clearMemo, memos, onMemoSelected, currentMemo }) => {
   return (
     <div className="side-container">
       <div className='sidebar-header'>
@@ -9,7 +9,7 @@ const SideBar = ({ clickNewButton, memos, onMemoSelected }) => {
         <button 
           id="newButton" 
           className="buttons"
-          onClick={clickNewButton}
+          onClick={clearMemo}
         >
           新規作成
         </button>
@@ -21,6 +21,7 @@ const SideBar = ({ clickNewButton, memos, onMemoSelected }) => {
             <li 
               key={memo.id}
               onClick={() => onMemoSelected(memo)}
+              className={currentMemo.id === memo.id ? 'selected' : ''}
             >
               {memo.title}
             </li>

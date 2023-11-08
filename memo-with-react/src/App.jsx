@@ -12,6 +12,14 @@ function App() {
     content: '', 
   });
 
+  // メモが選択された状態か判定
+  const isMemoSelected = currentMemo && currentMemo.id;
+
+  // （関数）currentMemo初期化
+  const clearMemo = () => {
+    setCurrentMemo({ id: null, title: '', content: '' });
+  };
+
   // 起動時localStorageからメモを読み込んで表示
   useEffect(() => {
     loadMemosFromStorage();
@@ -27,19 +35,14 @@ function App() {
     sortMemos(loadedMemos);
   };
 
-  // （関数）currentMemo初期化
-  const clearMemo = () => {
-    setCurrentMemo({ id: null, title: '', content: '' });
-  };
-
-  // （関数）新規作成ボタン
-  const clickNewButton = () => {
-    clearMemo();
-  };
-
   // （関数）保存/上書きボタン
   const saveMemo = () => {
     const { id, title, content } = currentMemo;
+
+    // メモ選択時には上書きを確認
+    if (isMemoSelected){
+      if (!window.confirm('メモを上書きしますか？')){ return; }
+    }
     
     if (!title || !content) {
       alert('タイトルと内容を入力してください');
@@ -48,8 +51,6 @@ function App() {
     
     // メモが選択されていればidに値がある。なければDate関数で作成する。
     const memoId = id || Date.now().toString();
-    
-    // console.log(`id: ${currentMemo.id}, title: ${currentMemo.title}, content: ${currentMemo.content}`);
 
     // localStorageにメモを保存
     const newMemo = {...currentMemo, id: memoId};
@@ -68,6 +69,9 @@ function App() {
 
   // （関数）選択したメモ削除
   const deleteMemo = (id) => {
+
+    if (!window.confirm('選択されたメモを削除しますか？')){ return };
+
     // 選択されたメモをlocalStorageから削除
     localStorage.removeItem(id);
 
@@ -88,19 +92,21 @@ function App() {
     setMemos(sortedMemos)
   }
 
-
   return (
     <div className="App">
       <SideBar
-        clickNewButton={clickNewButton}
+        clearMemo={clearMemo}
         memos={memos}
         onMemoSelected={onMemoSelected}
+        isMemoSelected={isMemoSelected}
+        currentMemo={currentMemo}
       />
       <Main
         saveMemo={saveMemo}
         deleteMemo={deleteMemo}
         currentMemo={currentMemo}
         setCurrentMemo={setCurrentMemo}
+        isMemoSelected={isMemoSelected}
       />
     </div>
   );
