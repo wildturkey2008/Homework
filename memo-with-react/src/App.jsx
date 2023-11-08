@@ -101,6 +101,7 @@ function App() {
         isMemoSelected={isMemoSelected}
         currentMemo={currentMemo}
       />
+      
       <Main
         saveMemo={saveMemo}
         deleteMemo={deleteMemo}
